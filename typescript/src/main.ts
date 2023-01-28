@@ -1,28 +1,32 @@
-import { Card } from "./card";
-import { Deck } from "./deck";
-import readline from "readline-promise";
-const readConsole = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-  terminal: true,
-});
+import { Deck } from "./essentials/deck";
+import { dealerTurn, playerTurn } from "./mechanics/turns";
+import { initializePlayerAndDealer } from "./mechanics/initializations";
 
 async function main(whenFinished: () => void) {
   const deck = new Deck();
-  const hand = new Array<Card | undefined>();
 
-  let playing = true;
-  while (playing) {
-    var card = deck.cards.pop();
-    hand.push(card);
-    var total = hand.reduce((total, card) => total + (card?.rank || 0), 0);
-    console.log(`Hit with ${card?.Suit} ${card?.rank}. Total is ${total}`);
-    await readConsole.questionAsync("Stand, Hit (s/h) \n").then((read) => {
-      if (read !== "h") {
-        playing = false;
-      }
-    });
+  const { playerHand, playerCounter, dealerHand, dealerCounter } =
+    initializePlayerAndDealer(deck);
+
+  const playerLost = await playerTurn(deck, playerHand, playerCounter);
+
+  if (!playerLost) {
+    dealerTurn(dealerCounter, playerLost, deck, dealerHand);
   }
+
+  if (playerLost) {
+    console.log("Dealer wins.\n\n");
+  } else if (
+    dealerCounter.total > 21 ||
+    dealerCounter.total < playerCounter.total
+  ) {
+    console.log("Player wins.\n\n");
+  } else if (dealerCounter.total === playerCounter.total) {
+    console.log("Tts a tie.\n\n");
+  } else if (dealerCounter.total > playerCounter.total) {
+    console.log("Dealer wins.\n\n");
+  }
+
   whenFinished();
 }
 

@@ -9,4 +9,8 @@ describe("Test deck", () => {
   test("Should have 4 distinct suits", () => {
     expect(new Set(new Deck().cards.map((card) => card.Suit)).size).toBe(4);
   });
+
+  // test("Lose with more than 21", () => {
+  //   expect()
+  // })
 });
