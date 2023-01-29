@@ -22,7 +22,7 @@ async function main(whenFinished: () => void) {
   ) {
     console.log("Player wins.\n\n");
   } else if (dealerCounter.total === playerCounter.total) {
-    console.log("Tts a tie.\n\n");
+    console.log("Its a tie.\n\n");
   } else if (dealerCounter.total > playerCounter.total) {
     console.log("Dealer wins.\n\n");
   }

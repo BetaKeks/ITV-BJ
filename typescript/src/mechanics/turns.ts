@@ -81,8 +81,8 @@ export const dealerTurn = (
   dealerHand: Array<Card>
 ) => {
   console.log(
-    "\n\nDealers current hand: ",
-    `Its a ${dealerCounter.isHardTotal ? "hard" : "soft"} ${
+    `\n\nDealers first card ${dealerHand[0].Suit} ${dealerHand[0].rank}.`,
+    `\nCurrent hand: Its a ${dealerCounter.isHardTotal ? "hard" : "soft"} ${
       dealerCounter.total
     }.\n\n`
   );
@@ -95,7 +95,8 @@ export const dealerTurn = (
     dealerCounter.updateTotal(card.rank);
 
     dealerStands = dealerCounter.total >= 17;
+    const dealerBusted = dealerCounter.total > 21;
 
-    printStatus(card, dealerCounter, false, "dealer");
+    printStatus(card, dealerCounter, dealerBusted, "dealer");
   }
 };

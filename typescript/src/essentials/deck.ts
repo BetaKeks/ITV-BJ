@@ -1,13 +1,19 @@
+import { DEFAULT_RANKS, SPECIAL_RANKS } from "../utils/constants";
 import { Card } from "./card";
-import { specialRanks, Suit } from "./suit";
+import { Suit } from "./suit";
+
 export class Deck {
   public cards: Array<Card> = [];
 
-  constructor() {
-    const suits = Object.values(Suit);
+  // constructor params for testing only
+  constructor(
+    private numSuits: number = 4,
+    private ranks: Array<number> = DEFAULT_RANKS
+  ) {
+    const suits = Object.values(Suit).slice(0, numSuits);
 
-    for (let suit in Object.keys(Suit)) {
-      for (let rank = 1; rank < 14; rank += 1) {
+    for (let suit in suits) {
+      for (let rank of ranks) {
         this.cards.push(new Card(this.getCardRank(rank), suits[suit]));
       }
     }
@@ -15,7 +21,7 @@ export class Deck {
     this.cards = this.shuffleDeck(this.cards);
   }
 
-  private getCardRank = (rank: number): number => specialRanks[rank] ?? rank;
+  private getCardRank = (rank: number): number => SPECIAL_RANKS[rank] ?? rank;
 
   private shuffleDeck = (unshuffledDeck: Array<Card>): Array<Card> =>
     unshuffledDeck
